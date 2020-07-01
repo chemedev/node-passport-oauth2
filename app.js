@@ -12,7 +12,6 @@ const cors = require('cors');
 const app = express();
 
 const PORT = process.env.PORT || 3000;
-const HOST = process.env.HOST || 'localhost';
 
 app.set('view engine', 'ejs');
 
@@ -32,8 +31,8 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => console.log('Connected to MongoDB'))
-  .then(() => app.listen(PORT, HOST))
-  .then(() => console.log(`Running on http://${HOST}:${PORT}`))
+  .then(() => app.listen(PORT))
+  .then(() => console.log(`Running on http://${process.env.HOST}:${PORT}`))
   .catch((err) => console.error(err.message));
 
 app.use(cors());
