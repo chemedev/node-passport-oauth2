@@ -1,6 +1,6 @@
 const passport = require('passport');
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const FacebookStrategy = require('passport-facebook').Strategy;
+const GoogleStrategy = require('passport-google-oauth20');
+const FacebookStrategy = require('passport-facebook');
 const User = require('../models/user-model');
 
 passport.serializeUser((user, done) => done(null, user.id));
@@ -51,7 +51,7 @@ passport.use(
       console.log('profile', profile, refreshToken);
       console.log('refreshToken', refreshToken);
       console.log('accessToken', accessToken);
-      return done(null, profile);
+      done(null, profile);
     }
     // User.findOne({ facebookId: profile.id }).then((currentUser) => {
     //   if (currentUser) {
