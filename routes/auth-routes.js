@@ -10,6 +10,20 @@ router.get('/logout', (req, res) => {
   res.redirect('/');
 });
 
+//
+// DISQUS
+//
+
+router.get('/disqus', passport.authenticate('disqus'));
+
+router.get('/disqus/redirect', passport.authenticate('disqus'), (_req, res) => {
+  res.redirect('/profile');
+});
+
+//
+// GOOGLE
+//
+
 router.get(
   '/google',
   passport.authenticate('google', {
@@ -17,16 +31,22 @@ router.get(
   })
 );
 
-router.get('/facebook', passport.authenticate('facebook'));
+router.get('/google/redirect', passport.authenticate('google'), (_req, res) => {
+  res.redirect('/profile');
+});
 
-router.get('/google/redirect', passport.authenticate('google'), (_req, res) =>
-  res.redirect('/profile')
-);
+//
+// FACEBOOK
+//
+
+router.get('/facebook', passport.authenticate('facebook'));
 
 router.get(
   '/facebook/redirect',
   passport.authenticate('facebook'),
-  (_req, res) => res.redirect('/profile')
+  (_req, res) => {
+    res.redirect('/profile');
+  }
 );
 
 module.exports = router;

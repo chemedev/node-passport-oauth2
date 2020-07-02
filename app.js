@@ -10,6 +10,7 @@ const passport = require('passport');
 const cors = require('cors');
 
 const app = express();
+
 app.use(cors());
 
 const PORT = process.env.PORT || 3000;
@@ -37,7 +38,7 @@ mongoose
   .then(() => console.log(`Running on http://${HOST}:${PORT}`))
   .catch((err) => console.error(err.message));
 
-app.use('/auth', authRoutes); // Auth routes
+app.use('/auth', authRoutes, () => {}); // Auth routes
 app.use('/profile', profileRoutes); // Profile routes
 
 app.get('/', (req, res) => {
