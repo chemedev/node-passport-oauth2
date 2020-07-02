@@ -80,10 +80,10 @@ passport.use(
           done(null, currentUser);
         } else {
           new User({
-            username: profile?.name || 'no username',
-            email: profile?.email || 'no email',
-            facebookId: profile?.id || 'no id',
-            picture: profile?.picture || 'no picture',
+            username: profile.name || 'no username',
+            email: profile.email || 'no email',
+            facebookId: profile.id || 'no id',
+            picture: profile.picture || 'no picture',
           })
             .save()
             .then((newUser) => {
