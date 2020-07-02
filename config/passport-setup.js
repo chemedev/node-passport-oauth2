@@ -11,34 +11,6 @@ passport.deserializeUser((id, done) =>
 );
 
 passport.use(
-  new DisqusStrategy(
-    {
-      callbackURL: '/auth/disqus/redirect',
-      clientID: process.env.DISQUS_CLIENT_ID,
-      clientSecret: process.env.DISQUS_CLIENT_SECRET,
-    },
-    (accessToken, refreshToken, profile, done) => {
-      User.findOne({ disqusId: profile.id }).then((currentUser) => {
-        if (currentUser) {
-          done(null, currentUser);
-        } else {
-          new User({
-            username: profile.displayName,
-            email: profile.emails[0] || '',
-            disqusId: profile.id,
-            picture: `https://disqus.com/api/users/avatars/${profile.username}.jpg`,
-          })
-            .save()
-            .then((newUser) => {
-              done(null, newUser);
-            });
-        }
-      });
-    }
-  )
-);
-
-passport.use(
   new GoogleStrategy(
     {
       callbackURL: '/auth/google/redirect',
@@ -72,18 +44,46 @@ passport.use(
       callbackURL: '/auth/facebook/redirect',
       clientID: process.env.FB_CLIENT_ID,
       clientSecret: process.env.FB_CLIENT_SECRET,
-      profileFields: ['id', 'email', 'name'],
+      profileFields: ['displayName', 'email', 'picture.type(large)'],
     },
-    (accessToken, refreshToken, profile, done) => {
+    (_accessToken, _refreshToken, profile, done) => {
       User.findOne({ facebookId: profile.id }).then((currentUser) => {
         if (currentUser) {
           done(null, currentUser);
         } else {
           new User({
-            username: profile.name || 'no username',
-            email: profile.email || 'no email',
-            facebookId: profile.id || 'no id',
-            picture: profile.picture || 'no picture',
+            username: profile.displayName,
+            email: profile.emails[0].value,
+            facebookId: profile.id,
+            picture: profile.photos[0].value,
+          })
+            .save()
+            .then((newUser) => {
+              done(null, newUser);
+            });
+        }
+      });
+    }
+  )
+);
+
+passport.use(
+  new DisqusStrategy(
+    {
+      callbackURL: '/auth/disqus/redirect',
+      clientID: process.env.DISQUS_CLIENT_ID,
+      clientSecret: process.env.DISQUS_CLIENT_SECRET,
+    },
+    (_accessToken, _refreshToken, profile, done) => {
+      User.findOne({ disqusId: profile.id }).then((currentUser) => {
+        if (currentUser) {
+          done(null, currentUser);
+        } else {
+          new User({
+            username: profile.displayName,
+            email: profile.emails[0] || '',
+            disqusId: profile.id,
+            picture: `https://disqus.com/api/users/avatars/${profile.username}.jpg`,
           })
             .save()
             .then((newUser) => {

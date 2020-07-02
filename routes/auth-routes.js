@@ -39,7 +39,10 @@ router.get('/google/redirect', passport.authenticate('google'), (_req, res) => {
 // FACEBOOK
 //
 
-router.get('/facebook', passport.authenticate('facebook'));
+router.get(
+  '/facebook',
+  passport.authenticate('facebook', { scope: ['email'] })
+);
 
 router.get(
   '/facebook/redirect',
