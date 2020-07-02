@@ -10,8 +10,10 @@ const passport = require('passport');
 const cors = require('cors');
 
 const app = express();
+app.use(cors());
 
 const PORT = process.env.PORT || 3000;
+const HOST = process.env.HOST || 'localhost';
 
 app.set('view engine', 'ejs');
 
@@ -32,10 +34,8 @@ mongoose
   })
   .then(() => console.log('Connected to MongoDB'))
   .then(() => app.listen(PORT))
-  .then(() => console.log(`Running on http://${process.env.HOST}:${PORT}`))
+  .then(() => console.log(`Running on http://${HOST}:${PORT}`))
   .catch((err) => console.error(err.message));
-
-app.use(cors());
 
 app.use('/auth', authRoutes); // Auth routes
 app.use('/profile', profileRoutes); // Profile routes
